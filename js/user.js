@@ -29,5 +29,27 @@ async function logIn() {
     let email = document.getElementById('log-email').value;
     let password = document.getElementById('log-password').value;
 
-    toToday();
+    let { data: users, error } = await client
+    .from('users')
+    .select('*')
+
+    // console.log(email, password);
+
+    let found = false;
+
+    users.forEach(user => {
+        if (user.email === email){
+            found = true;
+            if (user.password === password){
+                toToday();
+            } else{
+                document.getElementById('without-account').innerText='Incorrect password!';
+                document.getElementById('without-account').style.visibility='visible';
+            }
+        } 
+        if (user.email===users[users.length-1].email && found === false){
+            document.getElementById('without-account').innerText='You haven\'t signed in yet, sign in!';
+            document.getElementById('without-account').style.visibility='visible';
+        }
+    });
 }

@@ -172,10 +172,23 @@ li:active {
 }
 
 input{
-  margin: 1vh;
+  margin: 1rem auto;
   border: 1px solid #124E66;
-  width: 30vw;
+  /* width: 30vw; */
+  width: 20rem;
   height: 5vh;
+  display: block;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  border: 1px solid #124E66 !important;
+  -webkit-text-fill-color: whitesmoke !important;
+  -webkit-box-shadow: 0 0 0 1000px #2E3944 inset !important;
+  transition: background-color 5000s ease-in-out 0s !important;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif !important;
 }
 
 input[type="radio"] {
@@ -191,11 +204,13 @@ form{
 }
 
 .start-div{
-  width: 40vw;
-  height: 40vh;
+  /* width: 40vw; */
+  width: 25rem;
+  height: 35vh;
   margin: 30vh auto;
+  /* margin: 15rem auto; */
   text-align: center;
-  font-size: 1rem;
+  display: block;
   background-color: #748D92;
 }
 
@@ -206,20 +221,24 @@ form{
 }
 
 .start-form{
-  margin-top: 5vh;
+  margin-top: 1vh;
 }
 
 .log-sign-in-btn{
   width: 15vw;
   height: 5vh;
   border-radius: 0.5rem;
+  border: 1px solid #124E66;
+}
+
+.log-sign-in-btn:hover{
+  background-color: #f5f5f5;
+  color: black;
 }
 
 .already-account-txt{
-  margin-top: 5vh;
+  margin-top: 1vh;
   font-size: 0.7rem;
-  width: 35vw;
-  height: 5vh;
   text-align: right;
 }
 
@@ -242,4 +261,10 @@ form{
   margin: 0vh 5vw;
   width: 75vw;
   text-align: center;
+}
+
+#without-account{
+  font-size: 0.7rem;
+  height: 0.7rem;
+  visibility: hidden;
 }
