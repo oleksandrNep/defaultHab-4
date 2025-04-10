@@ -4,6 +4,8 @@
         <link rel="stylesheet" href="../css/global.css"/>
         <!-- <script src="https://unpkg.com/@supabase/supabase-js"></script>
         <script src="../js/script.js" defer></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+        <script src="../js/user.js"></script>
     </head>
     <body>
         <section>
@@ -14,10 +16,10 @@
             <div class="start-div">
                 <p class="start-p">To log in, fill in the fields:</p>              
                 <form class="start-form">
-                    <input placeholder="Your email">
-                    <input placeholder="Your password">
+                    <input id ='log-email' placeholder="Your email" type='email' required>
+                    <input id ='log-password' placeholder="Your password" type='password' required>
                 </form>
-                <button class = "log-sign-in-btn" onclick="toToday();/*handleSubmit(event)*/" type="submit">
+                <button class = "log-sign-in-btn" onclick="logIn();/*toToday();handleSubmit(event)*/" type="submit">
                     Log in
                 </button>
                 <p class="already-account-txt" onclick="toSignIn();">Don&apos;t have an account? Create it!</p>
