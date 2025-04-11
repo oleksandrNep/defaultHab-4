@@ -129,5 +129,8 @@ async function addHabit() {
   document.getElementById('notes').value='';
 }
 
+// Notifications
+
+
 fetchHabits();
 today();
