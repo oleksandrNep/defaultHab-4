@@ -19,3 +19,37 @@ async function addNotification() {
     document.getElementById('firstNotificationDate').value='';
     document.getElementById('notFrequency').value='';
 }
+
+async function insertNotifications() {
+  let { data: notifications, error } = await client
+  .from('notifications')
+  .select('*')
+
+  if (error) {
+    console.error('error', error.message);
+    return;
+  }
+
+  if (!notifications || notifications.length === 0) {
+    console.warn('No notifications found in the database.');
+    return;
+  }
+
+  document.getElementById('all-notifications').innerHTML = `<tr>
+        <th class="general-th">Name of notification</th>
+        <th class="general-th">First notification</th>
+        <th class="general-th">Frequency</th>
+      </tr>`;
+
+  // let table = ``;
+
+  notifications.forEach(notification => {
+    document.getElementById('all-notifications').innerHTML+=`<tr>
+        <td class="general-td">${notification.name}</td>
+        <td class="general-td">${notification.first_notification_date}</td>
+        <td class="general-td">${notification.frequency}</td>
+      </tr>`
+  });
+}
+
+insertNotifications();

@@ -4,7 +4,7 @@
     <title>Habits Tracker</title>
     <link rel="stylesheet" href="../css/global.css" />
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-    <script src = "../js/notification.js"></script>
+    <script src = "../js/app.js"></script>
   </head>
   <body>
     <header>
@@ -36,11 +36,10 @@
         <th class="general-th">Frequency (in hours)</th>
       </tr>
       <tr>
-        <td class="general-td"><input id='notName' type="text" placeholder="Name of notification" required></td>
-        <td class="general-td"><input id='firstNotificationDate' type="text" placeholder="03.23.2025 4:30:00 PM" required></td>
-        <td class="general-td"><input id='notFrequency' type="text" placeholder="Frequency (24h, 48h, etc.)"></td>
+        <td class="general-td"><input id='notName' class="new-input" type="text" placeholder="Name of notification" required></td>
+        <td class="general-td"><input id='firstNotificationDate' class="new-input" type="text" placeholder="03.23.2025 4:30:00 PM" required></td>
+        <td class="general-td"><input id='notFrequency' class="new-input" type="text" placeholder="Frequency (24h, 48h, etc.)"></td>
       </tr>
-      <tr></tr>
     </table>
 
     <button class="save-not-hab-btn" onclick="addNotification();">Save new notification</button>

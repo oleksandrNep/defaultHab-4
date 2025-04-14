@@ -90,7 +90,7 @@ async function today() {
   let { data: hab, error } = await client
   .from('habits')
   .select("*")
-  .lte('frequency', '06.10.2025 08:00:00 AM');
+  .lte('frequency', new Date().toISOString());
   console.log("h");
 
   if (error) {

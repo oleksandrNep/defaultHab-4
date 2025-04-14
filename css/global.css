@@ -1,6 +1,7 @@
 * {
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
   color: whitesmoke;
   background-color: #2E3944;
   font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
@@ -17,32 +18,12 @@ h2{
 
 html{
   font-size: 16px;
-}
-
-@media (max-width: 2000px) {
-  html {
-    font-size: 25px;
-  }
-}
-
- /* Tablet screen  */
-
-@media (max-width: 768px) {
-  html {
-    font-size: 18px;
-  }
-}
-
-/* Mobile screen  */
-
-@media (max-width: 450px) {
-  html {
-    font-size: 12px;
-  }
+  overflow-x: hidden;
 }
 
 body{
   min-height: 70vh;
+  overflow-x: hidden;
 }
 
 button{
@@ -88,8 +69,9 @@ h1{
 }
 
 main {
+  max-width: 100%;
   background-color: #141414;
-  min-height: 80vh;
+  min-height: 120vh;
   padding-top: 17vh;
   margin: 0;
   border-top: none;
@@ -124,7 +106,7 @@ main {
 
 .general-habs{
   background-color: #141414;
-  width: 100vw;
+  width: 100%;
   text-align: center;
   /* border-collapse: collapse; */
   border: none;
@@ -171,10 +153,9 @@ li:active {
   margin-left: 10vw;
 }
 
-input{
+input, .new-input{
   margin: 1rem auto;
   border: 1px solid #124E66;
-  /* width: 30vw; */
   width: 20rem;
   height: 5vh;
   display: block;
@@ -267,4 +248,38 @@ form{
   font-size: 0.7rem;
   height: 0.7rem;
   visibility: hidden;
+}
+
+@media (max-width: 2000px) {
+  html {
+    font-size: 25px;
+  }
+}
+
+@media (max-width: 1550px) {
+  .new-input{
+      width: 10rem;
+    }
+  }
+
+ /* Tablet screen  */
+
+@media (max-width: 768px) {
+  html {
+    font-size: 18px;
+  }
+.new-input{
+    width: 8rem;
+  }
+}
+
+/* Mobile screen  */
+
+@media (max-width: 450px) {
+  html {
+    font-size: 12px;
+  }
+  .new-input{
+    width: 5rem;
+  }
 }

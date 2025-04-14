@@ -31,8 +31,8 @@ const client = supabase.createClient(supabaseUrl, supabaseKey);
 //   }
 // }
 
-// for single row
-async function fetchHabits() {
+// Habits
+async function insertHabits() {
   const { data: habits, error } = await client
     .from('habits')
     // .select('habit, frequency, notes');
@@ -48,16 +48,21 @@ async function fetchHabits() {
     return;
   }
 
-  const firstHabit = habits[0];
-  const secondHabit = habits[1];
-
-  document.getElementById('habit-cell').textContent = firstHabit.habit || '';
-  document.getElementById('freq-cell').textContent = new Date(firstHabit.frequency).toLocaleDateString();
-  document.getElementById('notes-cell').textContent = firstHabit.notes || '';
-
-  document.getElementById('habit-cellO').textContent = secondHabit.habit || '';
-  document.getElementById('freq-cellO').textContent = new Date(secondHabit.frequency).toLocaleDateString();
-  document.getElementById('notes-cellO').textContent = secondHabit.notes || '';
+  document.getElementById('general-habs').innerHTML = `<tr>
+  <th class="general-th">Name of notification</th>
+  <th class="general-th">First notification</th>
+  <th class="general-th">Frequency</th>
+  <th class="general-th">Notes</th>
+</tr>`;
+  
+  habits.forEach(habit => {
+    document.getElementById('general-habs').innerHTML+=`<tr>
+        <td class="general-td">${habit.habit}</td>
+        <td class="general-td">${formatDate(habit.first_date)}</td>
+        <td class="general-td">${habit.frequency}</td>
+        <td class="general-td">${habit.notes}</td>
+      </tr>`
+  });
 }
 
 // async function fetchHabits() {
@@ -87,32 +92,75 @@ async function fetchHabits() {
 //   cells[3].textContent = firstHabit.notes || '';
 // }
 
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleString('en-GB', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true,
+  });
+}
+
 async function today() {
-  let { data: hab, error } = await client
+  const todayDate = new Date();
+  todayDate.setUTCHours(0, 0, 0, 0);
+  const isoDate = todayDate.toISOString(); // 2025-04-14T00:00:00.000Z
+
+  let { data: todayHabits, error } = await client
   .from('habits')
   .select("*")
-  .lte('frequency', '06.10.2025 08:00:00 AM');
-  console.log("h");
+  // .lte('frequency', new Date().toISOString());
+  // .lte('first_date', '2025-04-14T00:00:00Z');
+  .lte('first_date', isoDate);
 
   if (error) {
     console.error('error', error.message);
     return;
   }
 
-  if (!hab || hab.length === 0) {
+  if (!todayHabits || todayHabits.length === 0) {
     console.warn('No habits found in the database.');
     return;
   }
 
-  const habits = hab[3];
+  let id = -1;
 
-  document.getElementById('habit-cellI').textContent = habits.habit || '';
-  document.getElementById('freq-cellI').textContent = new Date(habits.frequency).toLocaleDateString();
-  document.getElementById('notes-cellI').textContent = habits.notes || '';
+  document.getElementById('today-habs').innerHTML = `<tr>
+          <th class="general-th">Complete</th>
+          <th class="general-th">Habit</th>
+          <th class="general-th">First notification</th>
+          <th class="general-th">Frequency</th>
+          <th class="general-th">Notes</th>
+        </tr>`;
+  
+  todayHabits.forEach(todayHabit => {
+    document.getElementById('today-habs').innerHTML+=`<tr>
+        <td class="general-td"><input type="radio" id='${++id}'/></td>
+        <td class="general-td">${todayHabit.habit}</td>
+        <td class="general-td">${formatDate(todayHabit.first_date)}</td>
+        <td class="general-td">${todayHabit.frequency}</td>
+        <td class="general-td">${todayHabit.notes}</td>
+      </tr>`
+  });
+
+  radioInitialization();
+}
+
+function radioInitialization() {
+  const radios = document.querySelectorAll("input[type='radio']");
+  // console.log(radios);
+  radios.forEach(radio => {
+    radio.addEventListener('change', () => {
+      console.log(`Radio ${radio.id} selected`);
+      // document.getElementById(radio.id).
+    });
+  });
 }
 
 async function addHabit() {
-  
   // console.log('addHabit');
   let name = document.getElementById('name').value;
   let frequency = document.getElementById('frequency').value;
@@ -120,7 +168,7 @@ async function addHabit() {
   const { data, error } = await client
 .from('habits')
 .insert([
-  { habit: name, frequency: frequency, notes: notes },
+  { habit: name, first_date: frequency, notes: notes },
 ])
 .select()
 
@@ -129,8 +177,118 @@ async function addHabit() {
   document.getElementById('notes').value='';
 }
 
+//Log in and sign up system
+
+async function addUser() {
+  if (!document.getElementById('sign-email').value || !document.getElementById('sign-password').value){
+      console.log('empty input');
+      return;
+  }
+  let email = document.getElementById('sign-email').value;
+  let password = document.getElementById('sign-password').value;
+
+  const { data, error } = await client
+  .from('users')
+  .insert([
+      { email: email, password: password },
+  ])
+  .select()
+
+  document.getElementById('sign-email').value='';
+  document.getElementById('sign-password').value='';
+}
+
+async function logIn() {
+  if (!document.getElementById('log-email').value || !document.getElementById('log-password').value){
+      console.log('empty input');
+      return;
+  }
+  let email = document.getElementById('log-email').value;
+  let password = document.getElementById('log-password').value;
+
+  let { data: users, error } = await client
+  .from('users')
+  .select('*')
+
+  // console.log(email, password);
+
+  let found = false;
+
+  users.forEach(user => {
+      if (user.email === email){
+          found = true;
+          if (user.password === password){
+              toToday();
+          } else{
+              document.getElementById('without-account').innerText='Incorrect password!';
+              document.getElementById('without-account').style.visibility='visible';
+          }
+      } 
+      if (user.email===users[users.length-1].email && found === false){
+          document.getElementById('without-account').innerText='You haven\'t signed in yet, sign in!';
+          document.getElementById('without-account').style.visibility='visible';
+      }
+  });
+}
+
 // Notifications
 
+async function addNotification() {
+  // console.log('addHabit');
+  let notName = document.getElementById('notName').value;
+  let firstNotificationDate = document.getElementById('firstNotificationDate').value;
+  let notFrequency = document.getElementById('notFrequency').value;
+  // console.log(notName, firstNotificationDate, notFrequency);
+  const { data, error } = await client
+  .from('notifications')
+  .insert([
+    { name: notName, first_notification_date: firstNotificationDate, frequency: notFrequency },
+  ])
+  .select()
 
-fetchHabits();
-today();
+  document.getElementById('notName').value='';
+  document.getElementById('firstNotificationDate').value='';
+  document.getElementById('notFrequency').value='';
+}
+
+async function insertNotifications() {
+let { data: notifications, error } = await client
+.from('notifications')
+.select('*')
+
+if (error) {
+  console.error('error', error.message);
+  return;
+}
+
+if (!notifications || notifications.length === 0) {
+  console.warn('No notifications found in the database.');
+  return;
+}
+
+document.getElementById('all-notifications').innerHTML = `<tr>
+      <th class="general-th">Name of notification</th>
+      <th class="general-th">First notification</th>
+      <th class="general-th">Frequency</th>
+    </tr>`;
+
+// let table = ``;
+
+notifications.forEach(notification => {
+  document.getElementById('all-notifications').innerHTML+=`<tr>
+      <td class="general-td">${notification.name}</td>
+      <td class="general-td">${formatDate(notification.first_notification_date)}</td>
+      <td class="general-td">${notification.frequency}</td>
+    </tr>`
+});
+}
+
+function initializeProject(){
+  today();
+  insertHabits();
+  insertNotifications();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initializeProject();
+});

@@ -37,3 +37,7 @@ function handleSubmit(event) {
       alert("Неправильний логін або пароль.");
   }
 }
+
+function done(){
+  
+}
